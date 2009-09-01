@@ -1,17 +1,21 @@
 #labels Phase-Deploy,Phase-Design
 = HTML ATTRIBUTES =
 
+
 # this attribute will check for empty fields
 
 required = "yes"
+
 
 # use pre-defined rules for input validation (Note: to add custom use rule(regex) in js code)
 
 rule = "alpha, numeric, floating, alnum, alnumhyph, email"
 
+
 # minimum length to allow (Note: use numbers e.g 8)
 
 minlength = "(length)"
+
 
 
 # maximum length to allow

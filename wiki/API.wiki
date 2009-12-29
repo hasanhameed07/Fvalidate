@@ -1,4 +1,4 @@
-#labels Phase-Implementation,Phase-Design,API
+#labels Phase-Implementation,Phase-Design,API,Featured
 =Fvalidate API=
 
 ==fvalidate(options)==

@@ -33,16 +33,14 @@ Create or modify existing html form. Form tag must have id attribute set.
     <input type="submit" value="Submit>
 </form>
 }}}
-Here we have added few attributes:
-    1. required="yes"
-    2. minlength="8", maxlength="20"
-    3. rule="alpha"
+Here we have added following new attributes: required="yes", minlength="8", maxlength="20" and rule="alpha".
 We also have also added custom error message which will show when userid doesn't match `<span class="err-msg">userid doesn't match</span>`
 
 
 *Step 4:*
 Finally call javascript.
-{{{<script type="text/javascript">
+{{{
+<script type="text/javascript">
 $(document).ready(function(){
 
 	$("#myform").Fvalidate();
@@ -52,4 +50,5 @@ $(document).ready(function(){
 
 	    // define your custom regex rules to jquery element(s)
 	$("input[name=address]").rule(/^[a-z0-9-\s]*$/);
-});</script>}}}
+});</script>
+}}}

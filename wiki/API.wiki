@@ -1,0 +1,19 @@
+==fvalidate()==
+A constructor for this plugin. Attach validation to the submit action of Form or it finds the first submit button and attach validation to it's click event.
+Note: The form must have id attribute set.
+{{{
+$("#login").Fvalidate();
+}}}
+You can attach to as many forms as you want.
+{{{
+$("#login, form#sidebar-login").Fvalidate({alertErrors:false});
+}}}
+
+===Options===
+|| *Property* || *Default* || *Description* ||
+|| alertErrors || true || Alert error messages.||
+|| submitButton || $form.find("input[type=submit]:first") OR null || Button to attach validation. By default first submit button is used if exists otherwise form's onsubmit event will be use ||
+|| attrForName || "name" || Value of field attribute to use in error messages. ||
+|| focusClass || ""inp-focus" || Class to use when focused. ||
+|| errorClass || "inp-error" || Class to use when field is on error. ||
+|| errorMsgClass || "err-msg" || Class of box to show when error occured. ||

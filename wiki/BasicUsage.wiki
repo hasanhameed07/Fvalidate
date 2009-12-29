@@ -1,4 +1,4 @@
-#labels Phase-Implementation,Phase-Deploy
+#labels Phase-Implementation,Phase-Deploy,Featured
 *Step 1:*
 Include jquery.js and fvalidate.js in your header file.
 {{{
@@ -9,6 +9,7 @@ Include jquery.js and fvalidate.js in your header file.
 *Step 2:*
 Add CSS Form styling.
 {{{
+<style>
 /* Fvalidate Styles */
 .inp-focus {
 	border: 1px solid #73AAD2;

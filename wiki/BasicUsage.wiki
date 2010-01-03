@@ -31,7 +31,7 @@ Create or modify existing html form. Form tag must have id attribute set.
     <input name="userid" type="text" required="yes" minlength="8"  maxlength="20" rule="alpha" />
     <input name="conf-userid" type="text" required="yes" /><span class="err-msg">userid doesn't match</span>
     <input name="address" type="text" required="yes" />
-    <input type="submit" value="Submit>
+    <input type="submit" value="Submit" />
 </form>
 }}}
 Here we have added following new attributes: required="yes", minlength="8", maxlength="20" and rule="alpha".

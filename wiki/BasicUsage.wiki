@@ -25,12 +25,30 @@ Add CSS Form styling.
 }}}
 
 *Step 3:*
-Create or modify existing html form. Form tag must have id attribute set.
+Create or modify existing html form. Keep the following layout format which is compatible with Twitter Bootstrap. Form tag must have id attribute set. And each form element must have a name attribute.
 {{{
 <form id="myform" name="myform">
-    <input name="userid" type="text" required="yes" minlength="8"  maxlength="20" rule="alpha" />
-    <input name="conf-userid" type="text" required="yes" /><span class="err-msg">userid doesn't match</span>
-    <input name="address" type="text" required="yes" />
+<div class="control-group">
+    <label class="control-label" for="input07">User id:</label>
+    <div class="controls">
+      <input type="text" class="input-xlarge"  required="yes" minlength="8"  maxlength="20" rule="alpha" name="userid">
+      <p class="help-block"></p>
+    </div>
+</div>
+
+<div class="control-group">
+    <label class="control-label" for="input07">User id:</label>
+    <div class="controls">
+    <input name="conf-userid" type="text" required="yes" /><p class="help-block"></p><span class="err-msg">userid doesn't match</span>
+   </div>
+</div>
+<div class="control-group">
+    <label class="control-label" for="input07">User id:</label>
+    <div class="controls">
+    <input name="address" type="text" required="yes" /><p class="help-block"></p>
+    </div>
+</div>
+
     <input type="submit" value="Submit" />
 </form>
 }}}

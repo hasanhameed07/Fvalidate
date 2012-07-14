@@ -36,6 +36,13 @@ Create or modify existing html form. Form tag must have id attribute set.
 }}}
 Here we have added following new attributes: required="yes", minlength="8", maxlength="20" and rule="alpha".
 We also have also added custom error message which will show when userid doesn't match `<span class="err-msg">userid doesn't match</span>`
+Rules allowed are:
+alpha
+numeric
+floating
+alnum
+alnumhyph
+email
 
 
 *Step 4:*

@@ -1,5 +1,5 @@
 /**
- * Fvalidate v1.0 - A validation plugin for jQuery
+ * Fvalidate v3.0 - A validation plugin for jQuery
  * Copyright (C) 2010  Hasan Hameed
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,11 +17,13 @@
  */
 
 /**
- * Fvalidate v1.0.1
- * by Hasan Hameed - theculpritz@hotmail.com
+ * Fvalidate v3.0.0
+ * by Hasan Hameed - hasanhameed89@gmail.com
  *
- * http://code.google.com/p/fvalidate/
+ * Project Url: https://github.com/hasanhameed89/Fvalidate/
  */
+
+
 (function($) {
 
 	var _errors = [],
@@ -35,12 +37,15 @@
 		$fields = $form.find("input, textarea, select").filter(":not(:submit)"),
 
 		defaults = {
-			alertErrors:	true,												/* alert error messages */
+			alertErrors:	false,												/* alert error messages */
+			showErrorsOnSubmitOnly: false,					
 			submitButton:	$form.find("input[type=submit]:first") || null,		/* button to attach validation if not null */
 			attrForName:	"name",												/* define field attribute to use as field name in error message (chnge only when other one is defined) */
 			focusClass:		"inp-focus",										/* class to use when focused */
 			errorClass: 	"inp-error",										/* error class name */
-			errorMsgClass:	"err-msg"											/* error message class name */
+			errorMsgClass:	"text-danger",										/* error message class name */
+			onSuccess: 		function(){ return true; },							/* success callback  */
+			onError: 		function(){},										/* error callback with errors as argument */
 		},
 		options = $.extend(defaults, settings);
 
@@ -51,12 +56,14 @@
 			$(this).addClass(options.focusClass);
 		});
 		$fields.blur(function() {
+		        _validate(this);
 			$(this).removeClass(options.focusClass);
 		});
 
 		$fields.keyup(function(){
 			_validate(this);
 		});
+
 
 		if(options.submitButton==null)
 			$form.submit(function(){
@@ -78,13 +85,16 @@
 			/* Focus first error field */
 			if($form.countErrors()>0){
 				$form.showErrors();
+				/* TODO: focus first element
 				var x;
 				for(x in _errors[formId]){
 					_errors[formId][x]['elem'].focus(); break;
-				}
+				}*/
+				var errors = $form.getErrors();
+				options.onError(errors);
 				return false;
 			}
-			return true;
+			return options.onSuccess();
 		};
 
 		/**
@@ -97,32 +107,40 @@
 			val = $input.val();
 
 			/* required => yes */
-			if($input.attr("required")=='yes'){
+			if($input.attr("required")){
 				if($input.is(":checkbox") || $input.is(":radio"))
 					if (!$input.attr('checked') || !$input.is(':checked')){
-						$input.setError('Please select '+Name); return false; /* on error */
+						$input.setError('Please select '+Name); 
+						return false; /* on error */
 					}
 				if(val=='' || val==undefined){
-					$input.setError('Please type '+Name); return false;
+					$input.setError(Name + ' is required.'); 
+					return false;
 				}
 			}
+
+			if (val=='')
+				return false;
 
 			/* Check for rules */
 			var mask = _rules[Name] || $input.attr("rule") || false;
 			if(mask){
+			    var maskm = '';
 				switch(mask){
-				case 'alpha':mask = /^[a-zA-Z\s]*$/; break;
-				case 'numeric': mask = /^[0-9\s]*$/; break;
-				case 'floating': mask = /^[0-9-\.\s]*$/; break;
-				case 'alnum': mask = /^[a-zA-Z-0-9\s]*$/; break;
-				case 'alnumhyph': mask = /^[a-zA-Z0-9-\s]*$/; break;
-				case 'email': mask = /^[^@\s<&>]+@([-a-z0-9]+\.)+[a-z]{2,}$/i; break;
+				case 'alpha':mask = /^[a-zA-Z\s]*$/; maskm=' must be Alphabets only.'; break;
+				case 'numeric': mask = /^[0-9\s]*$/; maskm=' must be Numbers.'; break;
+				case 'floating': mask = /^[0-9-\.\s]*$/;  maskm=' must be Floating numbers.'; break;
+				case 'alnum': mask = /^[a-zA-Z-0-9\s]*$/;  maskm=' must be Alphabets or numbers.'; break;
+				case 'alnumhyph': mask = /^[a-zA-Z0-9-\s]*$/;  maskm=' must be Alphabets or numbers (including hyphens).'; break;
+				case 'email': mask = /^[^@\s<&>]+@([-a-z0-9]+\.)+[a-z]{2,}$/i; maskm='is not valid e-mail address.'; break;
+				default:
+				    maskm='is invalid.';
 				}
 				if(!mask.test(val) ){
-					$input.setError('Invalid '+Name); return false;
+					$input.setError(Name+''+maskm); return false;
 				}
 			}
-	
+
 			/* Check for min. length */
 			var minlen = $input.attr("minlength") || 0;
 			if(minlen){
@@ -147,7 +165,7 @@
 
 		var methods = {
 
-			/* Set error 
+			/* Set error
 			 * @param string [form id], string [message]
 			 */
 			setError:	function(msg) {
@@ -155,25 +173,68 @@
 				fid = $(this).parents("form:last").attr("id");
 				_errors[fid][name] = [];
 				_errors[fid][name]['elem'] = this;
-				_errors[fid][name]['msg'] = msg;
-				return this.changeClass(options.focusClass,options.errorClass);
+				_errors[fid][name]['msg'] = msg; 
+				if (!options.showErrorsOnSubmitOnly) {
+
+					if(this.parent().hasClass('form-group')) {
+					    //this.next('i').remove();
+						this.parent('.form-group').addClass('has-error');
+					}
+					var msgElem = '<p class="'+options.errorMsgClass+'">'+msg+'</p>';
+					if (this.next('.'+options.errorMsgClass).length<1) {
+						if (this.attr('type')=='checkbox' || this.attr('type')=='radio')
+							this.before(msgElem);
+						else
+							this.after(msgElem);
+					} else if (this.next('.'+options.errorMsgClass).text()!=msg) {
+						this.next('.'+options.errorMsgClass).html(msgElem);
+					}
+					return this.changeClass(options.focusClass,options.errorClass);
+				}
+				else {
+					return this;
+				}
 			},
 
 			/* Remove error */
 			removeError:	function() {
 				var fid = $(this).parents("form:last").attr("id");
 				delete _errors[fid][$(this).attr("name")];
-				if(this.hasClass('inp-error'))
-					return this.changeClass(options.errorClass,options.focusClass);
+				//var ico = $(this).nextAll('.ui-icon-notice');
+				//ico.fadeOut('Slow',function(){ico.remove();});
+				this.parent('.form-group').removeClass('has-error');
+				$(this).next('.'+options.errorMsgClass).remove();
+				return this.changeClass(options.errorClass,options.focusClass);
+			},
+
+			/* showErrors - Show errors */
+			getErrors:	function() {
+				return _errors[formId];
 			},
 
 			/* showErrors - Show errors */
 			showErrors:	function() {
+
+				var fid = $(this).attr("id");
 				if(options.alertErrors){
-					var s = 'Following errors are occured:', fid = $(this).attr("id");
+					var s = '';
 					for(x in _errors[fid])
-						s += "\n " + _errors[fid][x]['msg']+'.';
-					alert(s);
+						s += "" + _errors[fid][x]['msg'] + '\n';
+					alert(s, 'Please Correct Mistakes');
+				}
+				
+				if (!options.showErrorsOnSubmitOnly) {
+					for(x in _errors[fid]) {
+						var $elem = $(_errors[fid][x]['elem']);
+						if ($elem.next('.'+options.errorMsgClass).length<1 && $elem.prev('.'+options.errorMsgClass).length<1) {
+							var msgElem = '<p class="'+options.errorMsgClass+'">'+_errors[fid][x]['msg']+'</p>';
+							$elem.changeClass(options.focusClass,options.errorClass);
+							if ($elem.attr('type')=='checkbox' || $elem.attr('type')=='radio')
+								$elem.before(msgElem);
+							else
+								$elem.after(msgElem);
+						}
+					}
 				}
 				return this;
 			},

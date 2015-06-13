@@ -12,7 +12,7 @@ Front-end Form Validation Is Now Easy:
 - Show errors either on field blur or on submission
 - Display alerts
 
-
+[Demo](https://jsfiddle.net/hasanhameed89/bLrfzvj6/7/embedded/result/) | [API Docs](https://github.com/hasanhameed89/fvalidate/wiki/Fvalidate-API)
 
 ###Step 1:
 Include jquery.js and fvalidate.js in your header file.
@@ -83,8 +83,6 @@ $(document).ready(function(){
 });</script>
 ```
 
-###Docs
-[API](https://github.com/hasanhameed89/fvalidate/wiki/Fvalidate-API)
 
 Original Author:
 Hasan Hamed

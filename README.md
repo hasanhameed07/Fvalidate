@@ -1,4 +1,4 @@
-# fvalidate
+# Fvalidate
 ### jQuery based plugin to handle form validations
 
 Front-end Form Validation Is Now Easy:

@@ -46,18 +46,19 @@
 			errorMsgClass:	"text-danger",										/* error message class name */
 			onSuccess: 		function(){ return true; },							/* success callback  */
 			onError: 		function(){},										/* error callback with errors as argument */
-		},
-		options = $.extend(defaults, settings);
+		};
+		
+		$form.options = $.extend(defaults, settings);
 
 		_errors[formId] = [];
 
 
 		$fields.focus(function() {
-			$(this).addClass(options.focusClass);
+			$(this).addClass($form.options.focusClass);
 		});
 		$fields.blur(function() {
 		        _validate(this);
-			$(this).removeClass(options.focusClass);
+			$(this).removeClass($form.options.focusClass);
 		});
 
 		$fields.keyup(function(){
@@ -65,12 +66,12 @@
 		});
 
 
-		if(options.submitButton==null)
+		if($form.options.submitButton==null)
 			$form.submit(function(){
 				if(!_validateForm()) return false;	/* Bind Validation on form submit */
 			});
 		else
-			options.submitButton.click(function(){
+			$form.options.submitButton.click(function(){
 				if(!_validateForm()) return false;	/* Bind Validation on button */
 			});
 
@@ -91,10 +92,10 @@
 					_errors[formId][x]['elem'].focus(); break;
 				}*/
 				var errors = $form.getErrors();
-				options.onError(errors);
+				$form.options.onError(errors);
 				return false;
 			}
-			return options.onSuccess();
+			return $form.options.onSuccess();
 		};
 
 		/**
@@ -103,7 +104,7 @@
 		function _validate(obj)
 		{
 			var $input = $(obj),
-			Name = $input.attr(options.attrForName),
+			Name = $input.attr($form.options.attrForName),
 			val = $input.val();
 
 			/* required => yes */
@@ -139,7 +140,7 @@
 				if(!mask.test(val) ){
 					$input.setError(Name+''+maskm); return false;
 				}
-			}
+			} 
 
 			/* Check for min. length */
 			var minlen = $input.attr("minlength") || 0;
@@ -155,9 +156,9 @@
 			if(elem){
 				if( elem.val()!==val ){
 					$input.setError(elem.attr('name')+' does not match.');
-					$input.nextAll('.'+options.errorMsgClass).slideDown(); return false;
+					$input.nextAll('.'+$form.options.errorMsgClass).slideDown(); return false;
 				}
-				$input.nextAll('.'+options.errorMsgClass).slideUp();
+				$input.nextAll('.'+$form.options.errorMsgClass).slideUp();
 			}
 			/* No Error */
 			$input.removeError();
@@ -174,22 +175,22 @@
 				_errors[fid][name] = [];
 				_errors[fid][name]['elem'] = this;
 				_errors[fid][name]['msg'] = msg; 
-				if (!options.showErrorsOnSubmitOnly) {
+				if (!$form.options.showErrorsOnSubmitOnly) {
 
 					if(this.parent().hasClass('form-group')) {
 					    //this.next('i').remove();
 						this.parent('.form-group').addClass('has-error');
 					}
-					var msgElem = '<p class="'+options.errorMsgClass+'">'+msg+'</p>';
-					if (this.next('.'+options.errorMsgClass).length<1) {
+					var msgElem = '<p class="'+$form.options.errorMsgClass+'">'+msg+'</p>';
+					if (this.next('.'+$form.options.errorMsgClass).length<1) {
 						if (this.attr('type')=='checkbox' || this.attr('type')=='radio')
 							this.before(msgElem);
 						else
 							this.after(msgElem);
-					} else if (this.next('.'+options.errorMsgClass).text()!=msg) {
-						this.next('.'+options.errorMsgClass).html(msgElem);
+					} else if (this.next('.'+$form.options.errorMsgClass).text()!=msg) {
+						this.next('.'+$form.options.errorMsgClass).html(msgElem);
 					}
-					return this.changeClass(options.focusClass,options.errorClass);
+					return this.changeClass($form.options.focusClass,$form.options.errorClass);
 				}
 				else {
 					return this;
@@ -203,8 +204,8 @@
 				//var ico = $(this).nextAll('.ui-icon-notice');
 				//ico.fadeOut('Slow',function(){ico.remove();});
 				this.parent('.form-group').removeClass('has-error');
-				$(this).next('.'+options.errorMsgClass).remove();
-				return this.changeClass(options.errorClass,options.focusClass);
+				$(this).next('.'+$form.options.errorMsgClass).remove();
+				return this.changeClass($form.options.errorClass,$form.options.focusClass);
 			},
 
 			/* showErrors - Show errors */
@@ -216,19 +217,19 @@
 			showErrors:	function() {
 
 				var fid = $(this).attr("id");
-				if(options.alertErrors){
+				if($form.options.alertErrors){
 					var s = '';
 					for(x in _errors[fid])
 						s += "" + _errors[fid][x]['msg'] + '\n';
 					alert(s, 'Please Correct Mistakes');
 				}
 				
-				if (!options.showErrorsOnSubmitOnly) {
+				if (!$form.options.showErrorsOnSubmitOnly) {
 					for(x in _errors[fid]) {
 						var $elem = $(_errors[fid][x]['elem']);
-						if ($elem.next('.'+options.errorMsgClass).length<1 && $elem.prev('.'+options.errorMsgClass).length<1) {
-							var msgElem = '<p class="'+options.errorMsgClass+'">'+_errors[fid][x]['msg']+'</p>';
-							$elem.changeClass(options.focusClass,options.errorClass);
+						if ($elem.next('.'+$form.options.errorMsgClass).length<1 && $elem.prev('.'+$form.options.errorMsgClass).length<1) {
+							var msgElem = '<p class="'+$form.options.errorMsgClass+'">'+_errors[fid][x]['msg']+'</p>';
+							$elem.changeClass($form.options.focusClass,$form.options.errorClass);
 							if ($elem.attr('type')=='checkbox' || $elem.attr('type')=='radio')
 								$elem.before(msgElem);
 							else

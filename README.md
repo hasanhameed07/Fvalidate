@@ -90,3 +90,9 @@ $(document).ready(function(){
 	$("input[name=address]").rule(/^[a-z0-9-\s]*$/);
 });</script>
 ```
+
+###Docs
+[API](https://github.com/hasanhameed89/fvalidate/wiki/Fvalidate-API)
+
+Original Author:
+Hasan Hamed

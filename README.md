@@ -28,14 +28,21 @@ Add some CSS styling.
 /* Fvalidate Styles */
 .inp-focus {
 	border: 1px solid #73AAD2;
-	}
+}
 .inp-error {
 	border: solid 1px #CC6666;
-	}
+}
 .err-msg {
 	display: none;
 	font-size: 0.85em;
-	}
+}
+/* Bootstrap class */
+.text-danger {
+	color: #a94442;
+	margin-top: 4px;
+	margin-bottom: 14px;
+	font-size: 11px;
+}
 </style>
 ```
 
@@ -43,28 +50,10 @@ Add some CSS styling.
 Create or modify existing html form. Keep the following layout format which is compatible with Twitter Bootstrap. Form tag must have id attribute set. And each form element must have a name attribute.
 ```html
 <form id="myform" name="myform">
-<div class="control-group">
-    <label class="control-label" for="input07">User id:</label>
-    <div class="controls">
-      <input type="text" class="input-xlarge"  required="yes" minlength="8"  maxlength="20" rule="alpha" name="userid">
-      <p class="help-block"></p>
-    </div>
-</div>
-
-<div class="control-group">
-    <label class="control-label" for="input07">User id:</label>
-    <div class="controls">
-    <input name="conf-userid" type="text" required="yes" /><p class="help-block"></p><span class="err-msg">userid doesn't match</span>
-   </div>
-</div>
-<div class="control-group">
-    <label class="control-label" for="input07">User id:</label>
-    <div class="controls">
-    <input name="address" type="text" required="yes" /><p class="help-block"></p>
-    </div>
-</div>
-
-    <input type="submit" value="Submit" />
+	<label>UserId:</label><input name="userId" type="text" required minlength="6"  maxlength="20" rule="alpha"/>
+	<label>Comfirm UserId:</label><input name="confirm-userId" type="text" required />
+	<label>Address:</label><input name="address" type="text" required />
+	<input type="submit" value="Submit" />
 </form>
 ```
 Here we have added following new attributes: required="yes", minlength="8", maxlength="20" and rule="alpha".
@@ -87,7 +76,7 @@ $(document).ready(function(){
 	$("#myform").Fvalidate();
 
 	    // this will attach the same as validation to both the fields
-	$("input[name=conf-userid]").sameAs($("input[name=userid]"));
+	$("input[name=conf-userId]").sameAs($("input[name=userId]"));
 
 	    // define your custom regex rules to jquery element(s)
 	$("input[name=address]").rule(/^[a-z0-9-\s]*$/);

@@ -18,12 +18,10 @@
 
 /**
  * Fvalidate v3.0.0
- * by Hasan Hameed - hasanhameed89@gmail.com
+ * by Hasan Hameed <hasan.hameed07@gmail.com>
  *
- * Project Url: https://github.com/hasanhameed89/Fvalidate/
+ * Project Url: https://github.com/hasanhameed07/Fvalidate/
  */
-
-
 (function($) {
 
 	var _errors = [],
